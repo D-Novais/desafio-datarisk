@@ -1,0 +1,82 @@
+version: '3.8'
+
+x-airflow-common:
+  &airflow-common
+  build: .
+    # image: apache/airflow:2.7.3 
+  environment:
+    &airflow-common-env
+    # ... resto do código continua igual
+    # Usando LocalExecutor para economizar processamento e memória na sua máquina
+    AIRFLOW__CORE__EXECUTOR: LocalExecutor
+    AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres-airflow/airflow
+    AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: 'true'
+    AIRFLOW__CORE__LOAD_EXAMPLES: 'false'
+  volumes:
+    # Mapeamentos fundamentais: o que está no seu PC reflete dentro do container
+    - ./dags:/opt/airflow/dags
+    - ./data:/opt/airflow/data
+    - ./sql:/opt/airflow/sql
+    - ./logs:/opt/airflow/logs
+  depends_on:
+    postgres-airflow:
+      condition: service_healthy
+
+services:
+  # 1. Banco de Dados interno apenas para metadados do Airflow
+  postgres-airflow:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: airflow
+      POSTGRES_PASSWORD: airflow
+      POSTGRES_DB: airflow
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "airflow"]
+      interval: 5s
+      retries: 5
+    restart: always
+
+  # 2. O SEU DATA WAREHOUSE (Onde ficarão as camadas Raw, Trusted, Refined)
+  postgres-dw:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: datarisk
+      POSTGRES_PASSWORD: datarisk
+      POSTGRES_DB: taxidb
+    ports:
+      - "5433:5432"
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "datarisk"]
+      interval: 5s
+      retries: 5
+    restart: always
+
+  # 3. Interface Web do Airflow
+  airflow-webserver:
+    <<: *airflow-common
+    command: webserver
+    ports:
+      - "8080:8080"
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "http://localhost:8080/health"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+    restart: always
+
+  # 4. Scheduler do Airflow (Quem executa as DAGs)
+  airflow-scheduler:
+    <<: *airflow-common
+    command: scheduler
+    restart: always
+
+  # 5. Inicializador do banco de dados do Airflow (Roda apenas uma vez)
+  airflow-init:
+    <<: *airflow-common
+    command: version
+    environment:
+      <<: *airflow-common-env
+      _AIRFLOW_DB_UPGRADE: 'true'
+      _AIRFLOW_WWW_USER_CREATE: 'true'
+      _AIRFLOW_WWW_USER_USERNAME: admin
+      _AIRFLOW_WWW_USER_PASSWORD: admin

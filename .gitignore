@@ -1,0 +1,12 @@
+# Ignorar dados pesados
+data/
+
+# Ignorar logs do Airflow
+logs/
+
+# Ignorar arquivos temporários do Python
+__pycache__/
+*.pyc
+
+# Ignorar pastas de banco de dados do Dockerhou 
+postgres-data/
