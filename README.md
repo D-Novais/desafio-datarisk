@@ -22,26 +22,31 @@ A solução foi projetada utilizando a **Arquitetura Medallion** (Raw, Trusted, 
 
 ```
 
-4. Acesse o Airflow em `http://localhost:8080` (Credenciais: `admin` / `admin`).
-5. Configure a `Connection` apontando para o Data Warehouse:
-* **Conn Id:** `postgres_dw_conn`
-* **Conn Type:** `Postgres`
-* **Host:** `postgres-dw`
-* **Schema:** `taxidb`
-* **Login/Password:** `datarisk`
+**4. Acesse o Airflow:**
+Navegue até `http://localhost:8080` no seu navegador (Credenciais: `admin` / `admin`).
 
+**5. Configure a Conexão com o Data Warehouse:**
+No menu superior do Airflow, vá em **Admin > Connections > +** e preencha os dados abaixo:
 
-6. Ative a DAG `taxi_trips_etl` e acompanhe a execução das tarefas.
+| Campo | Valor |
+| :--- | :--- |
+| **Connection Id** | `postgres_dw_conn` |
+| **Connection Type** | `Postgres` |
+| **Host** | `postgres-dw` |
+| **Schema** | `taxidb` |
+| **Login / Password** | `datarisk` |
+
+**6. Ative o Pipeline:**
+No painel principal, ative a chave da DAG `taxi_trips_etl` e acompanhe a execução automática das tarefas.
 
 ---
 
 ## 3. Respostas às Questões de Negócio
 
-As métricas abaixo foram extraídas da camada Refined após o processamento completo do ano de 2022. As queries SQL utilizadas para responder a estas questões, bem como as queries de transformação do pipeline, encontram-se na pasta `sql/` deste repositório.
+As métricas abaixo foram extraídas da camada Refined após o processamento completo do ano de 2022. As queries de transformação e validação encontram-se na pasta `sql/`.
 
-### 1. Qual o total de registros na tabela final?
-
-* **Resposta: A tabela final consolidada contém **37.038.525** registros válidos.
+### 1. Qual o total de registros na tabela final? 
+* **Resposta:** A tabela final consolidada contém **37.038.525** registros válidos.
 
 ```sql
 SELECT COUNT(*) AS total_registros 
