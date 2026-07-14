@@ -12,7 +12,6 @@ A solução foi projetada utilizando a **Arquitetura Medallion** (Raw, Trusted, 
 
 ---
 
-markdown
 ## 2. Como Executar o Projeto Localmente
 
 **1. Clone este repositório e acesse a pasta do projeto:**
