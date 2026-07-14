@@ -110,5 +110,3 @@ FROM refined.taxi_trips;
 
 
 ```
-
-```
