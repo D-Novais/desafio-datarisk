@@ -20,7 +20,7 @@ A solução foi projetada utilizando a **Arquitetura Medallion** (Raw, Trusted, 
    ```bash
    docker compose up -d --build
 
-```
+
 
 **4. Acesse o Airflow:**
 Navegue até `http://localhost:8080` no seu navegador (Credenciais: `admin` / `admin`).
