@@ -12,16 +12,30 @@ A solução foi projetada utilizando a **Arquitetura Medallion** (Raw, Trusted, 
 
 ---
 
+markdown
 ## 2. Como Executar o Projeto Localmente
 
-1. Clone este repositório e acesse a pasta `challenge`.
-2. Garanta que os arquivos compactados `.parquet.gz` do dataset original foram copiados para o diretório `challenge/data/`.
-3. Construa a imagem customizada com suporte ao PySpark e inicie a infraestrutura:
-   ```bash
-   docker compose up -d --build
+**1. Clone este repositório e acesse a pasta do projeto:**
+```bash
+git clone [https://github.com/D-Novais/desafio-datarisk.git](https://github.com/D-Novais/desafio-datarisk.git)
+cd desafio-datarisk
 
+```
 
+**2. Preparação do Dataset (Arquivos Parquet):**
+Seguindo as melhores práticas de governança, os dados brutos massivos não são versionados no repositório de código. Para que o pipeline funcione, siga os passos abaixo:
 
+* Acesse o repositório oficial do desafio disponibilizado pela Datarisk: [https://github.com/datarisk-io/data-engineering-challenge](https://github.com/datarisk-io/data-engineering-challenge).
+* Navegue até a pasta `nyc-tlc-data` e faça o download dos arquivos com a extensão `.parquet`.
+* Volte para a raiz deste repositório que você acabou de clonar (`desafio-datarisk`) e crie uma nova pasta chamada `data`.
+* Mova todos os arquivos `.parquet` que você baixou para dentro desta pasta `data/`.
+
+**3. Construa a imagem customizada com suporte ao PySpark e inicie a infraestrutura:**
+
+```bash
+docker compose up -d --build
+
+```
 **4. Acesse o Airflow:**
 Navegue até `http://localhost:8080` no seu navegador (Credenciais: `admin` / `admin`).
 
