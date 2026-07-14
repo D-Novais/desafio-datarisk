@@ -108,7 +108,6 @@ SELECT
     PERCENTILE_CONT(0.75) WITHIN GROUP (ORDER BY trip_distance) AS q3
 FROM refined.taxi_trips;
 
-```
 
 ```
 
